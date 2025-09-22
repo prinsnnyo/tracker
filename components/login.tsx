@@ -28,7 +28,7 @@ export default function Login({ onLogin }: LoginProps) {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 relative"
+      className="min-h-screen flex items-center justify-center p-3 sm:p-6 md:p-8 relative"
       style={{
         backgroundImage: 'url(/BUS.jpg)',
         backgroundSize: 'cover',
@@ -41,31 +41,31 @@ export default function Login({ onLogin }: LoginProps) {
       <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-blue-900/30 to-black/60"></div>
       
       {/* Bus-themed decorative elements */}
-      <div className="absolute top-10 left-10 opacity-20">
-        <Bus className="h-24 w-24 text-white transform rotate-12" />
+      <div className="absolute top-4 left-4 sm:top-10 sm:left-10 opacity-20">
+        <Bus className="h-16 w-16 sm:h-24 sm:w-24 text-white transform rotate-12" />
       </div>
-      <div className="absolute bottom-10 right-10 opacity-15">
-        <Bus className="h-32 w-32 text-white transform -rotate-12" />
+      <div className="absolute bottom-4 right-4 sm:bottom-10 sm:right-10 opacity-15">
+        <Bus className="h-20 w-20 sm:h-32 sm:w-32 text-white transform -rotate-12" />
       </div>
       
       {/* Login card - enhanced with bus theme */}
-      <Card className="w-full max-w-md mx-4 relative z-10 backdrop-blur-md bg-white/90 shadow-2xl border border-white/20">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 bg-gray-500 rounded-full shadow-lg">
-              <Bus className="h-10 w-10 text-white" />
+      <Card className="w-full max-w-sm sm:max-w-md mx-3 sm:mx-4 relative z-10 backdrop-blur-md bg-white/90 shadow-2xl border border-white/20">
+        <CardHeader className="text-center pb-4 sm:pb-6">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="p-3 sm:p-4 bg-gray-500 rounded-full shadow-lg">
+              <Bus className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-gray-800">
+          <CardTitle className="text-2xl sm:text-3xl font-bold text-gray-800">
             BUSWISE
           </CardTitle>
-          <CardDescription className="text-gray-600 text-base">
+          <CardDescription className="text-gray-600 text-sm sm:text-base px-2 sm:px-0">
             Your Smart Bus Tracking Companion
             <br />
-            <span className="text-sm opacity-75">Real-time tracking • Live updates • Smart routes</span>
+            <span className="text-xs sm:text-sm opacity-75">Real-time tracking • Live updates • Smart routes</span>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="username" className="text-sm font-medium text-gray-700">
@@ -79,7 +79,7 @@ export default function Login({ onLogin }: LoginProps) {
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-11 sm:h-10"
                   required
                 />
               </div>
@@ -97,7 +97,7 @@ export default function Login({ onLogin }: LoginProps) {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-11 sm:h-10"
                   required
                 />
               </div>
@@ -105,20 +105,26 @@ export default function Login({ onLogin }: LoginProps) {
 
             <Button 
               type="submit" 
-              className="w-full bg-emerald-600 hover:bg-emerald-700"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 h-11 sm:h-10 text-base sm:text-sm"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
           
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-700 font-medium mb-2 flex items-center gap-2">
+          <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-sm font-medium mb-2 text-gray-700">
               Demo Credentials:
             </p>
-            <p className="text-xs text-gray-600">Username: <span className="font-mono bg-white px-1 rounded">admin</span></p>
-            <p className="text-xs text-gray-600">Password: <span className="font-mono bg-white px-1 rounded">password</span></p>
-            <p className="text-xs text-gray-500 mt-2 italic">
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">
+                Username: <span className="font-mono bg-white px-1.5 py-0.5 rounded text-xs">admin</span>
+              </p>
+              <p className="text-xs text-gray-600">
+                Password: <span className="font-mono bg-white px-1.5 py-0.5 rounded text-xs">password</span>
+              </p>
+            </div>
+            <p className="text-xs text-gray-500 mt-2 italic leading-relaxed">
               Any credentials work for this demo!
             </p>
           </div>

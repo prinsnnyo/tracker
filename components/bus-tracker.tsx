@@ -63,7 +63,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
       />
 
       {/* Main Content - Google Maps Style Layout */}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex flex-col lg:flex-row">
         {/* Left Sidebar - Desktop Only (Google Maps Style) */}
         <div className="hidden lg:flex lg:flex-col lg:w-96 bg-white border-r shadow-lg overflow-hidden">
           {/* Search Section */}
@@ -114,7 +114,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
           <div className="flex-1 overflow-y-auto bg-gray-50">
             <div className="p-4">
               <h3 className="font-medium mb-3 text-gray-900 text-sm uppercase tracking-wide">
-                Nearby Buses ({nearbyBuses.length})
+                Buses near {selectedStop.name} ({nearbyBuses.length} buses)
               </h3>
               
               {/* Debug Info - Remove in production */}
@@ -300,7 +300,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
           </div>
 
           {/* Map */}
-          <div className="h-full">
+          <div className="h-80 sm:h-96 lg:h-full">
             <InteractiveMap
               buses={buses}
               busStops={busStops}
@@ -314,14 +314,16 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
       </div>
 
       {/* Mobile Bottom Panel - Only visible on mobile */}
-      <div className="lg:hidden bg-card border-t max-h-80 overflow-y-auto">
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-4">
+      <div className="lg:hidden bg-card border-t flex-1 min-h-0 overflow-hidden flex flex-col">
+        <div className="p-4 border-b bg-white">
+          <div className="flex items-center gap-2">
             <Navigation className="h-5 w-5 text-primary" />
             <h2 className="font-semibold">Buses near {selectedStop.name}</h2>
-            <div className="ml-auto text-xs text-muted-foreground">{selectedStop.facilities.join(" • ")}</div>
+            <div className="ml-auto text-xs text-muted-foreground">({nearbyBuses.length} buses)</div>
           </div>
+        </div>
 
+        <div className="flex-1 overflow-y-auto p-4">
           {nearbyBuses.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Clock className="h-12 w-12 mx-auto mb-2 opacity-50" />

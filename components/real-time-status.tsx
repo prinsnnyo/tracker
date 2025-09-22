@@ -31,11 +31,12 @@ export function RealTimeStatus({ isConnected, lastUpdate, onRefresh, onRateChang
 
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Clock className="h-3 w-3" />
-          <span>{timeSinceUpdate < 60 ? `${timeSinceUpdate}s ago` : `${Math.floor(timeSinceUpdate / 60)}m ago`}</span>
+          <span className="hidden sm:inline">{timeSinceUpdate < 60 ? `${timeSinceUpdate}s ago` : `${Math.floor(timeSinceUpdate / 60)}m ago`}</span>
+          <span className="sm:hidden">{timeSinceUpdate < 60 ? `${timeSinceUpdate}s` : `${Math.floor(timeSinceUpdate / 60)}m`}</span>
         </div>
 
-        {/* User info and logout button */}
-        <div className="flex items-center gap-2 ml-4">
+        {/* User info and logout button - Desktop only */}
+        <div className="hidden md:flex items-center gap-2 ml-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <User className="h-3 w-3" />
             <span>{user?.username}</span>
@@ -58,8 +59,9 @@ export function RealTimeStatus({ isConnected, lastUpdate, onRefresh, onRateChang
       </div>
 
       <div className="flex items-center gap-2">
+        {/* Speed controls - Hidden on mobile */}
         <select
-          className="text-xs border rounded px-2 py-1"
+          className="hidden sm:block text-xs border rounded px-2 py-1"
           onChange={(e) => onRateChange(e.target.value as "slow" | "normal" | "fast")}
           defaultValue="normal"
           title="Update frequency"
@@ -72,6 +74,17 @@ export function RealTimeStatus({ isConnected, lastUpdate, onRefresh, onRateChang
 
         <Button variant="ghost" size="sm" onClick={onRefresh} className="h-8 w-8 p-0">
           <RefreshCw className="h-3 w-3" />
+        </Button>
+        
+        {/* Mobile logout button */}
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={onLogout}
+          className="md:hidden h-8 w-8 p-0"
+          title="Logout"
+        >
+          <LogOut className="h-3 w-3" />
         </Button>
       </div>
     </div>
