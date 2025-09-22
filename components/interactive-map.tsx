@@ -14,6 +14,7 @@ interface InteractiveMapProps {
   buses: Bus[]
   busStops: BusStop[]
   selectedStop: BusStop
+  selectedBus?: Bus | null
   onStopSelect: (stop: BusStop) => void
   onBusSelect: (bus: Bus) => void
   isConnected: boolean
@@ -23,6 +24,7 @@ export function InteractiveMap({
   buses,
   busStops,
   selectedStop,
+  selectedBus,
   onStopSelect,
   onBusSelect,
   isConnected,
@@ -159,6 +161,13 @@ export function InteractiveMap({
       mapInstanceRef.current.setView([selectedStop.lat, selectedStop.lng], 15, { animate: true })
     }
   }, [selectedStop])
+
+  // Center map on selected bus when clicked
+  useEffect(() => {
+    if (mapInstanceRef.current && selectedBus) {
+      mapInstanceRef.current.setView([selectedBus.lat, selectedBus.lng], 16, { animate: true })
+    }
+  }, [selectedBus])
 
   return (
     <div className="relative w-full h-full">

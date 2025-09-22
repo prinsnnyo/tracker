@@ -36,6 +36,10 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
     return () => clearInterval(timer)
   }, [])
 
+  const handleBusSelect = (bus: Bus) => {
+    setSelectedBus(bus)
+  }
+
   const filteredStops = busStops.filter((stop) => stop.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const nearbyBuses = getBusesNearStop(selectedStop.id, 15)
@@ -145,7 +149,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                               ? "border-l-blue-500 hover:border-l-blue-600" 
                               : "border-l-orange-500 hover:border-l-orange-600"
                         } ${!isConnected ? "opacity-75" : ""}`}
-                        onClick={() => setSelectedBus(bus)}
+                        onClick={() => handleBusSelect(bus)}
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
@@ -305,8 +309,9 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
               buses={buses}
               busStops={busStops}
               selectedStop={selectedStop}
+              selectedBus={selectedBus}
               onStopSelect={setSelectedStop}
-              onBusSelect={setSelectedBus}
+              onBusSelect={handleBusSelect}
               isConnected={isConnected}
             />
           </div>
@@ -340,7 +345,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                     className={`p-4 cursor-pointer hover:shadow-md transition-shadow ${
                       !isConnected ? "opacity-75" : ""
                     }`}
-                    onClick={() => setSelectedBus(bus)}
+                    onClick={() => handleBusSelect(bus)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
