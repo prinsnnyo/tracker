@@ -57,7 +57,7 @@ export default function Login({ onLogin }: LoginProps) {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold text-gray-800">
-            🚌 BUSWISE
+            BUSWISE
           </CardTitle>
           <CardDescription className="text-gray-600 text-base">
             Your Smart Bus Tracking Companion
