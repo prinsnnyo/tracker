@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Search, Navigation, Users, Fuel, Zap } from "lucide-react"
-import { busStops, getBusesNearStop, Bus } from "@/lib/bus-data"
+import { busStops, getBusesNearStop, Bus, getBusOccupancyStatus } from "@/lib/bus-data"
 import { useRealTimeTracking } from "@/hooks/use-real-time-tracking"
 import { RealTimeStatus } from "@/components/real-time-status"
 import { InteractiveMap } from "@/components/interactive-map"
@@ -121,13 +121,6 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                 Buses near {selectedStop.name} ({nearbyBuses.length} buses)
               </h3>
               
-              {/* Debug Info - Remove in production */}
-              <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                <div>Selected Stop: {selectedStop.name} ({selectedStop.lat}, {selectedStop.lng})</div>
-                <div>Total Buses: {buses.length}</div>
-                <div>Search Radius: 15km</div>
-              </div>
-              
               {nearbyBuses.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                   <Clock className="h-12 w-12 mx-auto mb-3 opacity-40" />
@@ -138,6 +131,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                 <div className="space-y-2">
                   {nearbyBuses.map((bus) => {
                     const timeSinceUpdate = Math.floor((Date.now() - bus.lastUpdated.getTime()) / 1000)
+                    const occupancyStatus = getBusOccupancyStatus(bus.occupancy)
 
                     return (
                       <div
@@ -197,6 +191,28 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                             <div className="flex items-center gap-1">
                               <Fuel className="h-3 w-3" />
                               <span>{Math.round(bus.speed)} km/h</span>
+                            </div>
+                          </div>
+
+                          {/* Occupancy Status */}
+                          <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+                            <div className="flex items-center gap-1">
+                              <Users className="h-3 w-3 text-gray-400" />
+                              <span className={`text-xs font-medium ${occupancyStatus.color}`}>
+                                {occupancyStatus.status} ({bus.occupancy}%)
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full transition-all ${
+                                    occupancyStatus.status === 'Low' ? 'bg-green-500' :
+                                    occupancyStatus.status === 'Medium' ? 'bg-yellow-500' :
+                                    occupancyStatus.status === 'High' ? 'bg-orange-500' : 'bg-red-500'
+                                  }`}
+                                  style={{ width: `${Math.min(100, Math.max(0, bus.occupancy))}%` }}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -259,6 +275,31 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                 <div>
                   <p className="text-xs text-gray-500 font-medium">Capacity</p>
                   <p className="font-semibold text-gray-900">{selectedBus.capacity}</p>
+                </div>
+              </div>
+
+              {/* Desktop Occupancy Status */}
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium">Occupancy Status</p>
+                    <p className={`font-semibold ${getBusOccupancyStatus(selectedBus.occupancy).color}`}>
+                      {getBusOccupancyStatus(selectedBus.occupancy).status} ({selectedBus.occupancy}%)
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {getBusOccupancyStatus(selectedBus.occupancy).description}
+                    </p>
+                  </div>
+                  <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full transition-all ${
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'Low' ? 'bg-green-500' :
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'Medium' ? 'bg-yellow-500' :
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'High' ? 'bg-orange-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${Math.min(100, Math.max(0, selectedBus.occupancy))}%` }}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -338,6 +379,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
             <div className="space-y-3">
               {nearbyBuses.map((bus) => {
                 const timeSinceUpdate = Math.floor((Date.now() - bus.lastUpdated.getTime()) / 1000)
+                const occupancyStatus = getBusOccupancyStatus(bus.occupancy)
 
                 return (
                   <Card
@@ -377,6 +419,25 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                           <p className="text-sm text-muted-foreground">{bus.route}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-xs text-muted-foreground">Next: {bus.nextStop}</span>
+                          </div>
+                          {/* Mobile Occupancy Status */}
+                          <div className="flex items-center gap-2 mt-2">
+                            <div className="flex items-center gap-1">
+                              <Users className="h-3 w-3 text-gray-400" />
+                              <span className={`text-xs font-medium ${occupancyStatus.color}`}>
+                                {occupancyStatus.status} ({bus.occupancy}%)
+                              </span>
+                            </div>
+                            <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full transition-all ${
+                                  occupancyStatus.status === 'Low' ? 'bg-green-500' :
+                                  occupancyStatus.status === 'Medium' ? 'bg-yellow-500' :
+                                  occupancyStatus.status === 'High' ? 'bg-orange-500' : 'bg-red-500'
+                                }`}
+                                style={{ width: `${Math.min(100, Math.max(0, bus.occupancy))}%` }}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -447,6 +508,31 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Capacity</p>
                   <p className="font-medium">{selectedBus.capacity}</p>
+                </div>
+              </div>
+
+              {/* Mobile Occupancy Status */}
+              <div className="mt-4 p-3 bg-white/80 rounded-lg border">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground font-medium">Occupancy Status</p>
+                    <p className={`font-semibold ${getBusOccupancyStatus(selectedBus.occupancy).color}`}>
+                      {getBusOccupancyStatus(selectedBus.occupancy).status} ({selectedBus.occupancy}%)
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {getBusOccupancyStatus(selectedBus.occupancy).description}
+                    </p>
+                  </div>
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full transition-all ${
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'Low' ? 'bg-green-500' :
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'Medium' ? 'bg-yellow-500' :
+                        getBusOccupancyStatus(selectedBus.occupancy).status === 'High' ? 'bg-orange-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${Math.min(100, Math.max(0, selectedBus.occupancy))}%` }}
+                    />
+                  </div>
                 </div>
               </div>
 
