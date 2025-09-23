@@ -199,7 +199,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                             <div className="flex items-center gap-1">
                               <Users className="h-3 w-3 text-gray-400" />
                               <span className={`text-xs font-medium ${occupancyStatus.color}`}>
-                                {occupancyStatus.status} ({bus.occupancy}%)
+                                {occupancyStatus.description}
                               </span>
                             </div>
                             <div className="flex items-center gap-1">
@@ -284,9 +284,6 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                   <div>
                     <p className="text-xs text-gray-500 font-medium">Occupancy Status</p>
                     <p className={`font-semibold ${getBusOccupancyStatus(selectedBus.occupancy).color}`}>
-                      {getBusOccupancyStatus(selectedBus.occupancy).status} ({selectedBus.occupancy}%)
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
                       {getBusOccupancyStatus(selectedBus.occupancy).description}
                     </p>
                   </div>
@@ -425,7 +422,7 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                             <div className="flex items-center gap-1">
                               <Users className="h-3 w-3 text-gray-400" />
                               <span className={`text-xs font-medium ${occupancyStatus.color}`}>
-                                {occupancyStatus.status} ({bus.occupancy}%)
+                                {occupancyStatus.description}
                               </span>
                             </div>
                             <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
@@ -517,9 +514,6 @@ export function BusTracker({ user, onLogout }: BusTrackerProps) {
                   <div>
                     <p className="text-sm text-muted-foreground font-medium">Occupancy Status</p>
                     <p className={`font-semibold ${getBusOccupancyStatus(selectedBus.occupancy).color}`}>
-                      {getBusOccupancyStatus(selectedBus.occupancy).status} ({selectedBus.occupancy}%)
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
                       {getBusOccupancyStatus(selectedBus.occupancy).description}
                     </p>
                   </div>
